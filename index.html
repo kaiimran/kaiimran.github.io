@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WatchJourney - Marketing Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            padding: 20px;
+        }
+        .wizard-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+        .step-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+        .summary {
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 1em;
+            word-break: break-all;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .option {
+            padding: 10px 15px;
+            background-color: #ecf0f1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            position: relative;
+        }
+        .option:hover {
+            background-color: #d5dbdb;
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1em;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .back-btn {
+            background-color: #e74c3c;
+        }
+        .next-btn {
+            background-color: #2ecc71;
+        }
+        .copy-btn {
+            background-color: #2ecc71;
+        }
+        .reset-btn {
+            background-color: #e74c3c;
+        }
+        #urlContainer {
+            margin-top: 20px;
+        }
+        #generatedUrl {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1em;
+            word-break: break-all;
+        }
+        #copyBtn {
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        @media (max-width: 480px) {
+            .wizard-container {
+                padding: 20px;
+            }
+            .option {
+                width: 100%;
+                text-align: center;
+            }
+            .button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .category-inputs {
+            display: none;
+        }
+        .category-inputs.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="wizard-container">
+        <h1>Marketing Analytics</h1>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="step-indicator">Step 1 of 5</div>
+        <div id="summary" class="summary"></div>
+        <div id="stepContent" class="fade-in">
+            <div id="step1" class="step active">
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Select a Social Media Platform</h2>
+                <div class="options">
+                    <button class="option" data-value="Facebook">Facebook</button>
+                    <button class="option" data-value="Twitter">Twitter</button>
+                    <button class="option" data-value="Instagram">Instagram</button>
+                    <button class="option" data-value="TikTok">TikTok</button>
+                    <button class="option" data-value="WhatsApp">WhatsApp</button>
+                </div>
+            </div>
+            <div id="step2" class="step">
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Choose the content type on Instagram</h2>
+                <div class="options">
+                    <button class="option" data-value="Instagram Story">Instagram Story</button>
+                    <button class="option" data-value="Instagram Reels">Instagram Reels</button>
+                    <button class="option" data-value="Instagram Post">Instagram Post</button>
+                    <button class="option" data-value="Profile Bio">Profile Bio</button>
+                    <button class="option" data-value="Profile Action Button">Profile Action Button</button>
+                </div>
+            </div>
+            <div id="step3" class="step">
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Optional: Add additional categories to track</h2>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="addCategories">
+                    <label for="addCategories">I want to add custom categories</label>
+                </div>
+                <div id="categoryInputs" class="category-inputs">
+                    <input type="text" id="category1" placeholder="Enter Campaign Name">
+                    <input type="text" id="category2" placeholder="Enter Campaign Details (optional)">
+                </div>
+            </div>
+            <div id="step4" class="step">
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Paste URL to your shop's homepage or a specific product page</h2>
+                <input type="text" id="shopUrl" placeholder="Enter URL">
+            </div>
+            <div id="step5" class="step">
+                <br/><br/>
+                <h2 style="font-size: 1em;">🎉 Now you can promote the URL below! 🎯</h2>
+            </div>
+        </div>
+        <div class="button-container">
+            <button id="backBtn" class="button back-btn" disabled><i class="fas fa-arrow-left"></i> Back</button>
+            <button id="nextBtn" class="button next-btn" disabled>Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div id="urlContainer" class="hidden fade-in">
+            <input type="text" id="generatedUrl" readonly>
+            <button id="copyBtn" class="button copy-btn">Copy URL</button>
+            <br/><br/>
+            <button id="resetBtn" class="button reset-btn">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentStep = 1;
+            let selections = {};
+            const totalSteps = 5;
+
+            function updateUI() {
+                document.querySelector('.progress').style.width = `${((currentStep - 1) / (totalSteps - 1)) * 100}%`;
+                document.querySelector('.step-indicator').textContent = `Step ${currentStep} of ${totalSteps}`;
+                
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    step.classList.toggle('active', index + 1 === currentStep);
+                });
+                
+                if (currentStep === totalSteps) {
+                    document.getElementById('urlContainer').classList.remove('hidden');
+                    document.getElementById('backBtn').classList.add('hidden');
+                    document.getElementById('nextBtn').classList.add('hidden');
+                } else {
+                    document.getElementById('urlContainer').classList.add('hidden');
+                    document.getElementById('backBtn').classList.remove('hidden');
+                    document.getElementById('nextBtn').classList.remove('hidden');
+                    document.getElementById('nextBtn').textContent = currentStep === totalSteps - 1 ? 'Generate URL' : 'Next';
+                }
+
+                if(currentStep === 3) {
+                    const addCategoriesCheckbox = document.getElementById('addCategories');
+                    const categoryInputs = document.getElementById('categoryInputs');
+                    categoryInputs.classList.toggle('active', addCategoriesCheckbox.checked);
+                }
+
+                updateSummary();
+
+                document.getElementById('backBtn').disabled = currentStep === 1;
+                document.getElementById('nextBtn').disabled = !isStepValid();
+            }
+
+            function updateSummary() {
+                const summary = Object.entries(selections)
+                    .filter(([key, value]) => value && value !== 'Skip')
+                    .map(([key, value]) => {
+                        if (key === 'step3' && typeof value === 'object') {
+                            return Object.values(value).filter(v => v.trim() !== '').join(', ');
+                        }
+                        return value;
+                    })
+                    .join(' > ');
+                document.getElementById('summary').textContent = `Your selections: ${summary}`;
+            }
+
+            function isStepValid() {
+                switch(currentStep) {
+                    case 1:
+                    case 2:
+                        return selections[`step${currentStep}`] !== undefined;
+                    case 3:
+                        const addCategoriesCheckbox = document.getElementById('addCategories');
+                        if (addCategoriesCheckbox.checked) {
+                            return selections['step3'] && selections['step3'].category1 && selections['step3'].category1.trim() !== '';
+                        }
+                        return true; // Step 3 is optional
+                    case 4:
+                        return document.getElementById('shopUrl').value.trim() !== '';
+                    default:
+                        return true;
+                }
+            }
+
+            document.querySelectorAll('.step').forEach(step => {
+                step.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('option')) {
+                        step.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                        e.target.classList.add('selected');
+                        selections[`step${currentStep}`] = e.target.dataset.value;
+                        updateUI();
+                    }
+                });
+            });
+
+            document.getElementById('addCategories').addEventListener('change', function() {
+                const categoryInputs = document.getElementById('categoryInputs');
+                categoryInputs.classList.toggle('active', this.checked);
+                if (!this.checked) {
+                    document.getElementById('category1').value = '';
+                    document.getElementById('category2').value = '';
+                    delete selections['step3'];
+                }
+                updateUI();
+            });
+
+            document.getElementById('category1').addEventListener('input', function() {
+                const category2Input = document.getElementById('category2');
+                if (this.value.trim() !== '') {
+                    selections['step3'] = {category1: this.value, category2: ''};
+                    category2Input.disabled = false;
+                } else {
+                    delete selections['step3'];
+                    category2Input.disabled = true;
+                    category2Input.value = '';
+                }
+                updateUI();
+            });
+
+            document.getElementById('category2').addEventListener('input', function() {
+                if (selections['step3']) {
+                    selections['step3'].category2 = this.value;
+                }
+                updateUI();
+            });
+
+            document.getElementById('shopUrl').addEventListener('input', function() {
+                selections['step4'] = this.value;
+                updateUI();
+            });
+
+            document.getElementById('backBtn').addEventListener('click', function() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateUI();
+                }
+            });
+
+            document.getElementById('nextBtn').addEventListener('click', function() {
+                if (currentStep < totalSteps) {
+                    if (currentStep === 4) {
+                        const aff_sub = '12345'; // Hardcoded user_id for testing
+
+                        let aff_sub2 = encodeURIComponent(selections['step1'] || '');
+                        let aff_sub3 = encodeURIComponent(selections['step2'] || '');
+                        let aff_sub4 = encodeURIComponent(selections['step3']?.category1 || '');
+                        let aff_sub5 = encodeURIComponent(selections['step3']?.category2 || '');
+
+                        const url = `https://invl.io/cljuixt?aff_sub=${aff_sub}&aff_sub2=${aff_sub2}&aff_sub3=${aff_sub3}&aff_sub4=${aff_sub4}&aff_sub5=${aff_sub5}`;
+                        document.getElementById('generatedUrl').value = url;
+                    }
+                    currentStep++;
+                    updateUI();
+                }
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const urlInput = document.getElementById('generatedUrl');
+                urlInput.select();
+                document.execCommand('copy');
+                this.textContent = 'Copied!';
+                setTimeout(() => this.textContent = 'Copy URL', 2000);
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                currentStep = 1;
+                selections = {};
+                document.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.value = '';
+                    input.disabled = false;
+                });
+                document.getElementById('addCategories').checked = false;
+                document.getElementById('categoryInputs').classList.remove('active');
+                document.getElementById('category2').disabled = true;
+                document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                updateUI();
+            });
+
+            updateUI();
+        });
+    </script>
+</body>
+</html>
