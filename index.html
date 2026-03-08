@@ -369,7 +369,10 @@ function openWA(){
   if(!raw){showErr(T[lang].errBlank);shake();return;}
   var r=clean(raw);
   if(!r){showErr(T[lang].errBad);phoneEl.classList.add('is-error');shake();return;}
-  window.open('https://wa.me/'+r,'_blank');
+  // Use same-tab navigation instead of _blank.
+  // wa.me redirects to the WhatsApp app; the browser tab stays on wa.me.
+  // Pressing Back restores this page from bfcache — no orphan blank tab.
+  window.location.href = 'https://wa.me/' + r;
 }
 
 function showErr(msg){errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');}
@@ -390,6 +393,19 @@ phoneEl.addEventListener('input',function(){
   phoneEl.classList.remove('is-error');errEl.classList.remove('show');updatePreview();
 });
 phoneEl.addEventListener('keydown',function(e){if(e.key==='Enter')openWA();});
+
+// Persist the input value so it survives a full page reload (not just bfcache)
+phoneEl.addEventListener('input',function(){
+  try{sessionStorage.setItem('wa-num',phoneEl.value);}catch(e){}
+});
+
+// On page show (bfcache restore OR fresh load), re-fill input if we have a saved value
+window.addEventListener('pageshow',function(e){
+  try{
+    var saved=sessionStorage.getItem('wa-num');
+    if(saved&&!phoneEl.value){phoneEl.value=saved;updatePreview();}
+  }catch(e){}
+});
 
 /* ── SERVICE WORKER ── */
 if('serviceWorker' in navigator){
