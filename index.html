@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#0a3d2b"/>
+<meta name="theme-color" content="#25d366"/>
 <meta name="description" content="WhatsApp seseorang tanpa perlu simpan nombor. Masukkan nombor Malaysia dan terus buka WhatsApp."/>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="WA Tanpa Save"/>
+<link rel="apple-touch-icon" href="icon.svg"/>
+<link rel="icon" type="image/svg+xml" href="icon.svg"/>
 <title>WA Tanpa Save</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -18,48 +25,27 @@ html{height:100%;-webkit-text-size-adjust:100%}
 body{
   min-height:100%;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  background:var(--cream);
-  color:var(--txt);
+  background:var(--cream);color:var(--txt);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:max(env(safe-area-inset-top),16px) 16px max(env(safe-area-inset-bottom),16px);
+  padding:max(env(safe-area-inset-top),16px) 16px max(env(safe-area-inset-bottom),80px);
   -webkit-font-smoothing:antialiased;
 }
 
 /* ── LANG TOGGLE ── */
-.lang-bar{
-  width:100%;max-width:420px;
-  display:flex;justify-content:flex-end;
-  margin-bottom:10px;
-}
-.lang-toggle{
-  display:flex;
-  background:#e4ddd3;
-  border-radius:99px;
-  padding:3px;
-  gap:2px;
-}
+.lang-bar{width:100%;max-width:420px;display:flex;justify-content:flex-end;margin-bottom:10px}
+.lang-toggle{display:flex;background:#e4ddd3;border-radius:99px;padding:3px;gap:2px}
 .lang-toggle button{
-  border:none;background:transparent;cursor:pointer;
-  font-family:inherit;font-size:.72rem;font-weight:700;
-  padding:5px 14px;border-radius:99px;
-  color:var(--muted);
-  transition:background .18s,color .18s;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
+  border:none;background:transparent;cursor:pointer;font-family:inherit;
+  font-size:.72rem;font-weight:700;padding:5px 14px;border-radius:99px;color:var(--muted);
+  transition:background .18s,color .18s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
 }
-.lang-toggle button.active{
-  background:#fff;
-  color:var(--gdark);
-  box-shadow:0 1px 4px rgba(0,0,0,.1);
-}
+.lang-toggle button.active{background:#fff;color:var(--gdark);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 
 /* ── CARD ── */
 .card{
-  background:var(--card);
-  border-radius:var(--rcard);
+  background:var(--card);border-radius:var(--rcard);
   box-shadow:0 8px 32px rgba(0,0,0,.10),0 1px 0 rgba(255,255,255,.8) inset;
-  padding:32px 28px 28px;
-  width:100%;max-width:420px;
+  padding:32px 28px 28px;width:100%;max-width:420px;
   animation:up .45s cubic-bezier(.22,1,.36,1) both;
 }
 @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -68,8 +54,7 @@ body{
 .header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
 .wa-icon{
   width:48px;height:48px;flex-shrink:0;
-  background:linear-gradient(145deg,var(--g1),var(--g2));
-  border-radius:14px;
+  background:linear-gradient(145deg,var(--g1),var(--g2));border-radius:14px;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 14px rgba(37,211,102,.35);
 }
@@ -78,37 +63,23 @@ body{
 .header-text p{font-size:.7rem;font-weight:500;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 
 /* ── LABEL ── */
-.field-label{
-  display:block;
-  font-size:.7rem;font-weight:700;
-  color:var(--muted);letter-spacing:.7px;text-transform:uppercase;
-  margin-bottom:8px;
-}
+.field-label{display:block;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:8px}
 
 /* ── INPUT ── */
 .input-wrap{position:relative;margin-bottom:6px}
-.flag{
-  position:absolute;left:13px;top:50%;transform:translateY(-50%);
-  font-size:1.15rem;line-height:1;pointer-events:none;
-}
+.flag{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1.15rem;line-height:1;pointer-events:none}
 input[type=text]{
-  width:100%;
-  padding:14px 14px 14px 46px;
-  font-family:inherit;font-size:1.05rem;font-weight:600;
-  color:var(--txt);
-  background:var(--cream);
-  border:2px solid var(--border);
-  border-radius:var(--r);
-  outline:none;
-  -webkit-appearance:none;appearance:none;
-  transition:border-color .18s,box-shadow .18s;
-  letter-spacing:.4px;
+  width:100%;padding:14px 14px 14px 46px;
+  font-family:inherit;font-size:1.05rem;font-weight:600;color:var(--txt);
+  background:var(--cream);border:2px solid var(--border);border-radius:var(--r);
+  outline:none;-webkit-appearance:none;appearance:none;
+  transition:border-color .18s,box-shadow .18s;letter-spacing:.4px;
 }
 input[type=text]::placeholder{color:#b5bdb9;font-weight:400;font-size:.95rem}
 input[type=text]:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(37,211,102,.15)}
 input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,57,43,.10)}
 
-/* ── ERROR + PREVIEW ── */
+/* ── MSG ROW ── */
 .msg-row{min-height:22px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .error-txt{font-size:.75rem;font-weight:600;color:var(--err);display:none}
 .error-txt.show{display:block}
@@ -121,14 +92,13 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 .clean-pill.show{display:inline-flex}
 .clean-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--g1);flex-shrink:0}
 
-/* ── BUTTON ── */
+/* ── MAIN BUTTON ── */
 .btn{
   display:flex;align-items:center;justify-content:center;gap:8px;
   width:100%;padding:16px;
   background:linear-gradient(135deg,#25d366,#128c4e);
   color:#fff;border:none;border-radius:var(--r);
-  font-family:inherit;font-size:.98rem;font-weight:800;
-  cursor:pointer;letter-spacing:.1px;
+  font-family:inherit;font-size:.98rem;font-weight:800;cursor:pointer;
   box-shadow:0 6px 20px rgba(37,211,102,.38);
   -webkit-tap-highlight-color:transparent;
   transition:transform .13s,box-shadow .13s,opacity .13s;
@@ -138,20 +108,29 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 .btn:active{transform:scale(.97);box-shadow:0 2px 10px rgba(37,211,102,.25);opacity:.92}
 @media(hover:hover){.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,211,102,.46)}}
 
+/* ── INSTALL BUTTON (Android) ── */
+.btn-install{
+  display:none;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;margin-top:10px;
+  background:transparent;border:2px solid var(--border);border-radius:var(--r);
+  font-family:inherit;font-size:.88rem;font-weight:700;color:var(--gdark);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:border-color .15s,background .15s;
+}
+.btn-install.visible{display:flex}
+.btn-install:active{background:var(--cream)}
+.btn-install svg{width:18px;height:18px;flex-shrink:0}
+
 /* ── EXAMPLES ── */
 .examples{margin-top:20px;background:var(--cream);border-radius:14px;padding:14px 16px}
 .examples-title{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px}
 .ex{
   display:flex;align-items:center;gap:6px;margin-bottom:6px;
-  cursor:pointer;-webkit-tap-highlight-color:transparent;
-  padding:4px 0;touch-action:manipulation;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;padding:4px 0;touch-action:manipulation;
 }
 .ex:last-child{margin-bottom:0}
 .ex:active .ex-raw,.ex:active .ex-clean{opacity:.6}
-.ex-raw{
-  font-size:.73rem;font-weight:600;font-family:'Courier New',Courier,monospace;
-  background:#ddd6c8;color:var(--txt);padding:2px 7px;border-radius:5px;white-space:nowrap;
-}
+.ex-raw{font-size:.73rem;font-weight:600;font-family:'Courier New',Courier,monospace;background:#ddd6c8;color:var(--txt);padding:2px 7px;border-radius:5px;white-space:nowrap}
 .ex-arr{font-size:.65rem;color:var(--muted);flex-shrink:0}
 .ex-clean{font-size:.73rem;font-weight:700;font-family:'Courier New',Courier,monospace;color:var(--g2)}
 
@@ -162,7 +141,43 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
   animation:up .45s .1s cubic-bezier(.22,1,.36,1) both;
 }
 
-/* ── RESPONSIVE ── */
+/* ── iOS ADD TO HOME BANNER ──
+   Fixed at bottom, only shown on iOS Safari when not in standalone mode */
+.ios-banner{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#fff;
+  border-top:1px solid var(--border);
+  padding:14px 20px max(env(safe-area-inset-bottom),14px);
+  display:none;
+  flex-direction:column;gap:10px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  z-index:100;
+  animation:slideUp .35s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.ios-banner.show{display:flex}
+.ios-banner-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ios-banner-icon{
+  width:40px;height:40px;flex-shrink:0;
+  background:linear-gradient(145deg,var(--g1),var(--g2));border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+}
+.ios-banner-icon svg{width:22px;height:22px;fill:#fff}
+.ios-banner-body{flex:1}
+.ios-banner-title{font-size:.82rem;font-weight:800;color:var(--gdark);margin-bottom:2px}
+.ios-banner-desc{font-size:.72rem;color:var(--muted);line-height:1.45}
+.ios-banner-desc b{color:var(--txt)}
+.ios-banner-close{
+  background:none;border:none;cursor:pointer;
+  font-size:1.2rem;color:var(--muted);padding:0 0 0 8px;line-height:1;
+  -webkit-tap-highlight-color:transparent;flex-shrink:0;
+}
+/* share icon arrow indicator */
+.ios-steps{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ios-step{display:flex;align-items:center;gap:5px;font-size:.7rem;font-weight:600;color:var(--muted)}
+.ios-step span{background:var(--cream);border-radius:6px;padding:3px 7px;color:var(--txt);font-size:.68rem}
+.ios-step-sep{color:#ccc;font-size:.65rem}
+
 @media(max-width:380px){
   .card{padding:26px 18px 22px;border-radius:20px}
   input[type=text]{font-size:.95rem;padding:13px 13px 13px 44px}
@@ -172,6 +187,7 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 </head>
 <body>
 
+<!-- LANG TOGGLE -->
 <div class="lang-bar">
   <div class="lang-toggle" role="group" aria-label="Language">
     <button id="btn-bm" class="active" onclick="setLang('bm')">BM</button>
@@ -179,6 +195,7 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
   </div>
 </div>
 
+<!-- CARD -->
 <div class="card">
   <div class="header">
     <div class="wa-icon">
@@ -205,11 +222,20 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
     </span>
   </div>
 
-  <button class="btn" id="wa-btn" onclick="openWA()">
+  <button class="btn" onclick="openWA()">
     <svg viewBox="0 0 32 32"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.52.67 4.9 1.83 6.94L2 30l7.29-1.79A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm7.07 19.49c-.29.82-1.71 1.57-2.33 1.63-.61.05-1.2.28-4.03-.84-3.41-1.35-5.58-4.85-5.75-5.07-.17-.22-1.39-1.85-1.39-3.53s.88-2.5 1.19-2.84c.31-.34.68-.43.91-.43.22 0 .45.002.65.01.21.01.49-.08.76.58.28.68 1.02 2.48.11 2.78-.91.31-1.25.62-1.25 1.23 0 .62 1.58 2.84 2.29 3.56.72.72 2.26 1.48 2.72 1.65.45.16.72.14 1.01-.14.29-.28.97-.97 1.22-.97.25 0 1.28.51 1.5.62.23.11.38.17.43.27.06.1.06.56-.23 1.38z"/></svg>
     <span id="btn-label">WhatsApp Sekarang</span>
   </button>
 
+  <!-- Android Install App button — shown only when PWA install is available -->
+  <button class="btn-install" id="btn-install" onclick="installApp()">
+    <svg id="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/>
+    </svg>
+    <span id="install-label">Pasang Aplikasi</span>
+  </button>
+
+  <!-- Examples -->
   <div class="examples">
     <div class="examples-title" id="ex-title">Contoh · Klik untuk cuba</div>
     <div class="ex" onclick="tryEx('011 1172 8210')">
@@ -235,19 +261,60 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 
 <p class="footer" id="footer-txt">Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.</p>
 
+<!-- iOS "Add to Home Screen" banner — shown only on iOS Safari, not standalone -->
+<div class="ios-banner" id="ios-banner">
+  <div class="ios-banner-top">
+    <div class="ios-banner-icon">
+      <svg viewBox="0 0 32 32"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.52.67 4.9 1.83 6.94L2 30l7.29-1.79A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm7.07 19.49c-.29.82-1.71 1.57-2.33 1.63-.61.05-1.2.28-4.03-.84-3.41-1.35-5.58-4.85-5.75-5.07-.17-.22-1.39-1.85-1.39-3.53s.88-2.5 1.19-2.84c.31-.34.68-.43.91-.43.22 0 .45.002.65.01.21.01.49-.08.76.58.28.68 1.02 2.48.11 2.78-.91.31-1.25.62-1.25 1.23 0 .62 1.58 2.84 2.29 3.56.72.72 2.26 1.48 2.72 1.65.45.16.72.14 1.01-.14.29-.28.97-.97 1.22-.97.25 0 1.28.51 1.5.62.23.11.38.17.43.27.06.1.06.56-.23 1.38z"/></svg>
+    </div>
+    <div class="ios-banner-body">
+      <div class="ios-banner-title" id="ios-title">Simpan ke Skrin Utama</div>
+      <div class="ios-banner-desc" id="ios-desc">
+        Guna seperti app — tiada perlu buka browser setiap kali.
+      </div>
+    </div>
+    <button class="ios-banner-close" onclick="closeBanner()" aria-label="Tutup">✕</button>
+  </div>
+  <div class="ios-steps" id="ios-steps">
+    <div class="ios-step">
+      <span id="step1">1. Ketik</span>
+      <!-- Share icon -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#128c4e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <div class="ios-step-sep">›</div>
+    <div class="ios-step"><span id="step2">2. "Add to Home Screen"</span></div>
+    <div class="ios-step-sep">›</div>
+    <div class="ios-step"><span id="step3">3. Add</span></div>
+  </div>
+</div>
+
 <script>
 /* ── TRANSLATIONS ── */
 var T={
-  bm:{title:'WA Tanpa Save Nombor',sub:'Malaysia · +60',lbl:'Nombor Telefon',
-      ph:'011 1172 8210 atau +60 11-1172 8210',btn:'WhatsApp Sekarang',
-      exTitle:'Contoh · Klik untuk cuba',
-      errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
-      footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.'},
-  en:{title:'WA Without Saving Number',sub:'Malaysia · +60',lbl:'Phone Number',
-      ph:'011 1172 8210 or +60 11-1172 8210',btn:'WhatsApp Now',
-      exTitle:'Examples · Tap to try',
-      errBlank:'Please enter a phone number.',errBad:'Invalid number. Please check again.',
-      footer:'No number is saved. Everything is processed in your browser only.'}
+  bm:{
+    title:'WA Tanpa Save Nombor',lbl:'Nombor Telefon',
+    ph:'011 1172 8210 atau +60 11-1172 8210',btn:'WhatsApp Sekarang',
+    exTitle:'Contoh · Klik untuk cuba',
+    errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
+    footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.',
+    install:'Pasang Aplikasi',
+    iosTitle:'Simpan ke Skrin Utama',
+    iosDesc:'Guna seperti app — tiada perlu buka browser setiap kali.',
+    step1:'1. Ketik',step2:'2. "Add to Home Screen"',step3:'3. Add'
+  },
+  en:{
+    title:'WA Without Saving Number',lbl:'Phone Number',
+    ph:'011 1172 8210 or +60 11-1172 8210',btn:'WhatsApp Now',
+    exTitle:'Examples · Tap to try',
+    errBlank:'Please enter a phone number.',errBad:'Invalid number. Please check again.',
+    footer:'No number is saved. Everything is processed in your browser only.',
+    install:'Install App',
+    iosTitle:'Add to Home Screen',
+    iosDesc:'Use like an app — no need to open the browser every time.',
+    step1:'1. Tap',step2:'2. "Add to Home Screen"',step3:'3. Add'
+  }
 };
 var lang='bm';
 
@@ -262,36 +329,24 @@ function setLang(l){
   document.getElementById('btn-label').textContent=t.btn;
   document.getElementById('ex-title').textContent=t.exTitle;
   document.getElementById('footer-txt').textContent=t.footer;
+  document.getElementById('install-label').textContent=t.install;
+  document.getElementById('ios-title').textContent=t.iosTitle;
+  document.getElementById('ios-desc').textContent=t.iosDesc;
+  document.getElementById('step1').textContent=t.step1;
+  document.getElementById('step2').textContent=t.step2;
+  document.getElementById('step3').textContent=t.step3;
   updatePreview();
 }
 
-/* ── NUMBER CLEANING ──
-   Tested cases:
-   "011 1172 8210"       → 601111728210
-   "011-1172 8210"       → 601111728210
-   "+60 11-1172 8210"    → 601111728210
-   "+6011-11728210"      → 601111728210
-   "1111728210"          → 601111728210  (no 0, no 60 prefix)
-   "601111728210"        → 601111728210  (already clean)
-   "03-2161 4455"        → 60321614455
-   "+603 8888 2525"      → 60388882525
-   "0321614455"          → 60321614455
-   "  +60  11 - 1172 8210  " → 601111728210 (whitespace/mixed)
-*/
+/* ── NUMBER CLEANING ── */
 function clean(raw){
   if(!raw||!raw.trim())return null;
-  var d=raw.replace(/\D/g,'');          // digits only
+  var d=raw.replace(/\D/g,'');
   if(!d)return null;
-
-  if(d.indexOf('60')===0){
-    // already has country code
-  }else if(d.charAt(0)==='0'){
-    d='60'+d.slice(1);                  // 011... → 6011...
-  }else{
-    d='60'+d;                           // 111... → 60111...
-  }
-
-  var local=d.slice(2);                 // part after '60'
+  if(d.indexOf('60')===0){}
+  else if(d.charAt(0)==='0'){d='60'+d.slice(1);}
+  else{d='60'+d;}
+  var local=d.slice(2);
   if(local.length<7||local.length>10)return null;
   return d;
 }
@@ -310,17 +365,14 @@ function updatePreview(){
 
 function openWA(){
   var raw=phoneEl.value.trim();
-  errEl.classList.remove('show');
-  phoneEl.classList.remove('is-error');
+  errEl.classList.remove('show');phoneEl.classList.remove('is-error');
   if(!raw){showErr(T[lang].errBlank);shake();return;}
   var r=clean(raw);
   if(!r){showErr(T[lang].errBad);phoneEl.classList.add('is-error');shake();return;}
   window.open('https://wa.me/'+r,'_blank');
 }
 
-function showErr(msg){
-  errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');
-}
+function showErr(msg){errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');}
 
 function shake(){
   phoneEl.animate(
@@ -331,18 +383,75 @@ function shake(){
 }
 
 function tryEx(val){
-  phoneEl.value=val;
-  phoneEl.classList.remove('is-error');
-  errEl.classList.remove('show');
-  updatePreview();
+  phoneEl.value=val;phoneEl.classList.remove('is-error');errEl.classList.remove('show');updatePreview();
 }
 
 phoneEl.addEventListener('input',function(){
-  phoneEl.classList.remove('is-error');
-  errEl.classList.remove('show');
-  updatePreview();
+  phoneEl.classList.remove('is-error');errEl.classList.remove('show');updatePreview();
 });
 phoneEl.addEventListener('keydown',function(e){if(e.key==='Enter')openWA();});
+
+/* ── SERVICE WORKER ── */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
+
+/* ── ANDROID: PWA Install prompt ── */
+var deferredPrompt=null;
+var installBtn=document.getElementById('btn-install');
+
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+  installBtn.classList.add('visible');
+});
+
+function installApp(){
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    if(r.outcome==='accepted')installBtn.classList.remove('visible');
+    deferredPrompt=null;
+  });
+}
+
+window.addEventListener('appinstalled',function(){
+  installBtn.classList.remove('visible');
+  deferredPrompt=null;
+});
+
+/* ── iOS: Show banner in Safari only, not in standalone mode ── */
+function isIOS(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent)||
+    (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+}
+function isStandalone(){
+  return window.navigator.standalone===true||
+    window.matchMedia('(display-mode: standalone)').matches;
+}
+function isSafari(){
+  var ua=navigator.userAgent;
+  // Safari on iOS: has "Safari" but NOT "CriOS" (Chrome) or "FxiOS" (Firefox)
+  return /Safari/i.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+}
+
+function closeBanner(){
+  var b=document.getElementById('ios-banner');
+  b.classList.remove('show');
+  try{sessionStorage.setItem('ios-banner-closed','1');}catch(e){}
+}
+
+window.addEventListener('load',function(){
+  if(isIOS()&&isSafari()&&!isStandalone()){
+    try{if(sessionStorage.getItem('ios-banner-closed'))return;}catch(e){}
+    // Small delay so it doesn't feel jarring on load
+    setTimeout(function(){
+      document.getElementById('ios-banner').classList.add('show');
+    },1200);
+  }
+});
 </script>
 </body>
 </html>
