@@ -68,8 +68,39 @@ body{
 /* ── INPUT ── */
 .input-wrap{position:relative;margin-bottom:6px}
 .flag{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1.15rem;line-height:1;pointer-events:none}
+/* both buttons share the same right slot — only one visible at a time */
+.clear-btn,.paste-btn{
+  position:absolute;right:0;top:0;bottom:0;
+  display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  opacity:0;pointer-events:none;
+  transition:opacity .15s,color .15s,background .15s;
+}
+.clear-btn.show,.paste-btn.show{opacity:1;pointer-events:auto}
+
+/* × clear */
+.clear-btn{width:44px;color:#b5bdb9;}
+.clear-btn:active{color:var(--txt)}
+.clear-btn svg{width:16px;height:16px;flex-shrink:0}
+
+/* Paste pill */
+.paste-btn{
+  right:10px;top:50%;bottom:auto;
+  width:auto;
+  transform:translateY(-50%);
+  padding:5px 10px;
+  background:var(--cream);
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  font-family:inherit;font-size:.72rem;font-weight:700;
+  color:var(--muted);
+  gap:5px;
+}
+.paste-btn:active{background:var(--border);color:var(--txt)}
+.paste-btn svg{width:13px;height:13px;flex-shrink:0}
 input[type=text]{
-  width:100%;padding:14px 14px 14px 46px;
+  width:100%;padding:14px 80px 14px 46px;
   font-family:inherit;font-size:1.05rem;font-weight:600;color:var(--txt);
   background:var(--cream);border:2px solid var(--border);border-radius:var(--r);
   outline:none;-webkit-appearance:none;appearance:none;
@@ -212,6 +243,18 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
     <span class="flag">🇲🇾</span>
     <input type="text" id="phone" autocomplete="off" inputmode="tel"
            placeholder="011 1172 8210 atau +60 11-1172 8210"/>
+    <button class="clear-btn" id="clear-btn" onclick="clearInput()" tabindex="-1" aria-label="Clear">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <button class="paste-btn show" id="paste-btn" onclick="pasteInput()" tabindex="-1" aria-label="Paste">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="4" rx="1"/>
+        <path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/>
+      </svg>
+      <span id="paste-label">Paste</span>
+    </button>
   </div>
 
   <div class="msg-row">
@@ -277,7 +320,7 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
   </div>
   <div class="ios-steps" id="ios-steps">
     <div class="ios-step">
-      <span id="step1">1. Tekan</span>
+      <span id="step1">1. Klik</span>
       <!-- Share icon -->
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#128c4e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
@@ -299,10 +342,10 @@ var T={
     exTitle:'Contoh · Klik untuk cuba',
     errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
     footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.',
-    install:'Muat Turun Aplikasi',
+    install:'Muat Turun Aplikasi',paste:'Paste',
     iosTitle:'Simpan ke Skrin Utama',
     iosDesc:'Guna seperti app — tidak perlu buka browser setiap kali.',
-    step1:'1. Tekan',step2:'2. "Add to Home Screen"',step3:'3. Add'
+    step1:'1. Klik',step2:'2. "Add to Home Screen"',step3:'3. Add'
   },
   en:{
     title:'WA Without Saving Number',lbl:'Phone Number',
@@ -310,7 +353,7 @@ var T={
     exTitle:'Examples · Tap to try',
     errBlank:'Please enter a phone number.',errBad:'Invalid number. Please check again.',
     footer:'No number is saved. Everything is processed in your browser only.',
-    install:'Install App',
+    install:'Install App',paste:'Paste',
     iosTitle:'Add to Home Screen',
     iosDesc:'Use like an app — no need to open the browser every time.',
     step1:'1. Tap',step2:'2. "Add to Home Screen"',step3:'3. Add'
@@ -330,6 +373,7 @@ function setLang(l){
   document.getElementById('ex-title').textContent=t.exTitle;
   document.getElementById('footer-txt').textContent=t.footer;
   document.getElementById('install-label').textContent=t.install;
+  document.getElementById('paste-label').textContent=t.paste;
   document.getElementById('ios-title').textContent=t.iosTitle;
   document.getElementById('ios-desc').textContent=t.iosDesc;
   document.getElementById('step1').textContent=t.step1;
@@ -356,11 +400,48 @@ var phoneEl=document.getElementById('phone');
 var pillEl=document.getElementById('clean-pill');
 var numEl=document.getElementById('clean-num');
 var errEl=document.getElementById('error-txt');
+var clearBtn=document.getElementById('clear-btn');
+var pasteBtn=document.getElementById('paste-btn');
 
 function updatePreview(){
   var r=clean(phoneEl.value);
   if(r){numEl.textContent=r;pillEl.classList.add('show');}
   else{pillEl.classList.remove('show');}
+  // swap: paste when empty, clear when has content
+  var hasVal=phoneEl.value.length>0;
+  clearBtn.classList.toggle('show',hasVal);
+  pasteBtn.classList.toggle('show',!hasVal);
+}
+
+function clearInput(){
+  phoneEl.value='';
+  phoneEl.classList.remove('is-error');
+  errEl.classList.remove('show');
+  pillEl.classList.remove('show');
+  clearBtn.classList.remove('show');
+  pasteBtn.classList.add('show');
+  phoneEl.focus();
+  try{sessionStorage.removeItem('wa-num');}catch(e){}
+}
+
+function pasteInput(){
+  if(!navigator.clipboard||!navigator.clipboard.readText){
+    // Fallback: just focus the field so the native paste popover appears
+    phoneEl.focus();
+    return;
+  }
+  navigator.clipboard.readText().then(function(text){
+    if(!text)return;
+    phoneEl.value=text;
+    phoneEl.focus();
+    phoneEl.classList.remove('is-error');
+    errEl.classList.remove('show');
+    updatePreview();
+    try{sessionStorage.setItem('wa-num',text);}catch(e){}
+  }).catch(function(){
+    // Permission denied or not supported — focus field so native paste works
+    phoneEl.focus();
+  });
 }
 
 function openWA(){
@@ -399,12 +480,12 @@ phoneEl.addEventListener('input',function(){
   try{sessionStorage.setItem('wa-num',phoneEl.value);}catch(e){}
 });
 
-// On page show (bfcache restore OR fresh load), re-fill input if we have a saved value
-window.addEventListener('pageshow',function(e){
+window.addEventListener('pageshow',function(){
   try{
     var saved=sessionStorage.getItem('wa-num');
-    if(saved&&!phoneEl.value){phoneEl.value=saved;updatePreview();}
+    if(saved&&!phoneEl.value){phoneEl.value=saved;}
   }catch(e){}
+  updatePreview(); // handles both paste/clear visibility
 });
 
 /* ── SERVICE WORKER ── */
