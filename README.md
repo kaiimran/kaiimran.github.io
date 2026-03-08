@@ -59,54 +59,6 @@ The cleaning logic handles:
 
 ---
 
-## Deploy to GitHub Pages
-
-1. Fork or clone this repo
-2. Go to **Settings → Pages**
-3. Set source to `main` branch, `/ (root)`
-4. Your site will be live at `https://yourusername.github.io/reponame/`
-
-> If deploying to a subfolder (not root), update `"start_url"` in `manifest.json` to match your path.
-
----
-
-## Install as an app
-
-**iPhone (Safari)**
-1. Open the site in Safari
-2. Tap the Share icon **⬆**
-3. Tap **"Add to Home Screen"**
-4. Tap **Add**
-
-**Android (Chrome)**
-1. Open the site in Chrome
-2. Tap the **"Install App"** button at the bottom of the card
-3. Tap **Install**
-
----
-
-## How the number cleaning works
-
-```js
-function clean(raw) {
-  // 1. Strip everything except digits
-  var d = raw.replace(/\D/g, '');
-
-  // 2. Normalise country code
-  if (d.startsWith('60'))      { /* already correct */ }
-  else if (d.startsWith('0')) { d = '60' + d.slice(1); }
-  else                        { d = '60' + d; }
-
-  // 3. Validate local part is 7–10 digits
-  var local = d.slice(2);
-  if (local.length < 7 || local.length > 10) return null;
-
-  return d;
-}
-```
-
----
-
 ## Tech stack
 
 | | |
