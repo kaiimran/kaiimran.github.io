@@ -1,412 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WatchJourney - Marketing Analytics</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            padding: 20px;
-        }
-        .wizard-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-        .progress-bar {
-            height: 8px;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background-color: #3498db;
-            border-radius: 4px;
-            width: 0;
-            transition: width 0.3s ease-in-out;
-        }
-        .step-indicator {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #7f8c8d;
-            font-size: 1em;
-        }
-        .summary {
-            text-align: left;
-            margin-bottom: 20px;
-            font-size: 1em;
-            word-break: break-all;
-        }
-        .options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-        .option {
-            padding: 10px 15px;
-            background-color: #ecf0f1;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1em;
-            position: relative;
-        }
-        .option:hover {
-            background-color: #d5dbdb;
-        }
-        .option.selected {
-            background-color: #3498db;
-            color: white;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 1em;
-        }
-        .button:hover {
-            opacity: 0.8;
-        }
-        .button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        .back-btn {
-            background-color: #e74c3c;
-        }
-        .next-btn {
-            background-color: #2ecc71;
-        }
-        .copy-btn {
-            background-color: #2ecc71;
-        }
-        .reset-btn {
-            background-color: #e74c3c;
-        }
-        #urlContainer {
-            margin-top: 20px;
-        }
-        #generatedUrl {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            font-size: 1em;
-            word-break: break-all;
-        }
-        #copyBtn {
-            width: 100%;
-        }
-        .hidden {
-            display: none;
-        }
-        .fade-in {
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .step {
-            display: none;
-        }
-        .step.active {
-            display: block;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            font-size: 1em;
-        }
-        @media (max-width: 480px) {
-            .wizard-container {
-                padding: 20px;
-            }
-            .option {
-                width: 100%;
-                text-align: center;
-            }
-            .button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .checkbox-container input[type="checkbox"] {
-            margin-right: 10px;
-        }
-        .category-inputs {
-            display: none;
-        }
-        .category-inputs.active {
-            display: block;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0a3d2b"/>
+<meta name="description" content="WhatsApp seseorang tanpa perlu simpan nombor. Masukkan nombor Malaysia dan terus buka WhatsApp."/>
+<title>WA Tanpa Save</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#25d366;--g2:#128c4e;--gdark:#0a3d2b;
+  --cream:#f2ede4;--card:#fff;--border:#ddd6c8;
+  --txt:#111;--muted:#6b7b73;--err:#c0392b;
+  --r:18px;--rcard:24px;
+}
+html{height:100%;-webkit-text-size-adjust:100%}
+body{
+  min-height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:var(--cream);
+  color:var(--txt);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:max(env(safe-area-inset-top),16px) 16px max(env(safe-area-inset-bottom),16px);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── LANG TOGGLE ── */
+.lang-bar{
+  width:100%;max-width:420px;
+  display:flex;justify-content:flex-end;
+  margin-bottom:10px;
+}
+.lang-toggle{
+  display:flex;
+  background:#e4ddd3;
+  border-radius:99px;
+  padding:3px;
+  gap:2px;
+}
+.lang-toggle button{
+  border:none;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:.72rem;font-weight:700;
+  padding:5px 14px;border-radius:99px;
+  color:var(--muted);
+  transition:background .18s,color .18s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.lang-toggle button.active{
+  background:#fff;
+  color:var(--gdark);
+  box-shadow:0 1px 4px rgba(0,0,0,.1);
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--card);
+  border-radius:var(--rcard);
+  box-shadow:0 8px 32px rgba(0,0,0,.10),0 1px 0 rgba(255,255,255,.8) inset;
+  padding:32px 28px 28px;
+  width:100%;max-width:420px;
+  animation:up .45s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.wa-icon{
+  width:48px;height:48px;flex-shrink:0;
+  background:linear-gradient(145deg,var(--g1),var(--g2));
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(37,211,102,.35);
+}
+.wa-icon svg{width:26px;height:26px;fill:#fff}
+.header-text h1{font-size:.98rem;font-weight:800;color:var(--gdark);line-height:1.25;letter-spacing:-.2px}
+.header-text p{font-size:.7rem;font-weight:500;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── LABEL ── */
+.field-label{
+  display:block;
+  font-size:.7rem;font-weight:700;
+  color:var(--muted);letter-spacing:.7px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+/* ── INPUT ── */
+.input-wrap{position:relative;margin-bottom:6px}
+.flag{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:1.15rem;line-height:1;pointer-events:none;
+}
+input[type=text]{
+  width:100%;
+  padding:14px 14px 14px 46px;
+  font-family:inherit;font-size:1.05rem;font-weight:600;
+  color:var(--txt);
+  background:var(--cream);
+  border:2px solid var(--border);
+  border-radius:var(--r);
+  outline:none;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color .18s,box-shadow .18s;
+  letter-spacing:.4px;
+}
+input[type=text]::placeholder{color:#b5bdb9;font-weight:400;font-size:.95rem}
+input[type=text]:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(37,211,102,.15)}
+input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,57,43,.10)}
+
+/* ── ERROR + PREVIEW ── */
+.msg-row{min-height:22px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.error-txt{font-size:.75rem;font-weight:600;color:var(--err);display:none}
+.error-txt.show{display:block}
+.clean-pill{
+  display:none;align-items:center;gap:5px;
+  background:rgba(37,211,102,.1);border:1.5px solid rgba(37,211,102,.25);
+  border-radius:99px;padding:3px 10px 3px 7px;
+  font-size:.78rem;font-weight:700;color:var(--g2);
+}
+.clean-pill.show{display:inline-flex}
+.clean-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--g1);flex-shrink:0}
+
+/* ── BUTTON ── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,#25d366,#128c4e);
+  color:#fff;border:none;border-radius:var(--r);
+  font-family:inherit;font-size:.98rem;font-weight:800;
+  cursor:pointer;letter-spacing:.1px;
+  box-shadow:0 6px 20px rgba(37,211,102,.38);
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .13s,box-shadow .13s,opacity .13s;
+  touch-action:manipulation;
+}
+.btn svg{width:20px;height:20px;fill:#fff;flex-shrink:0}
+.btn:active{transform:scale(.97);box-shadow:0 2px 10px rgba(37,211,102,.25);opacity:.92}
+@media(hover:hover){.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,211,102,.46)}}
+
+/* ── EXAMPLES ── */
+.examples{margin-top:20px;background:var(--cream);border-radius:14px;padding:14px 16px}
+.examples-title{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px}
+.ex{
+  display:flex;align-items:center;gap:6px;margin-bottom:6px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  padding:4px 0;touch-action:manipulation;
+}
+.ex:last-child{margin-bottom:0}
+.ex:active .ex-raw,.ex:active .ex-clean{opacity:.6}
+.ex-raw{
+  font-size:.73rem;font-weight:600;font-family:'Courier New',Courier,monospace;
+  background:#ddd6c8;color:var(--txt);padding:2px 7px;border-radius:5px;white-space:nowrap;
+}
+.ex-arr{font-size:.65rem;color:var(--muted);flex-shrink:0}
+.ex-clean{font-size:.73rem;font-weight:700;font-family:'Courier New',Courier,monospace;color:var(--g2)}
+
+/* ── FOOTER ── */
+.footer{
+  margin-top:16px;font-size:.68rem;color:var(--muted);text-align:center;
+  max-width:320px;line-height:1.5;
+  animation:up .45s .1s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:380px){
+  .card{padding:26px 18px 22px;border-radius:20px}
+  input[type=text]{font-size:.95rem;padding:13px 13px 13px 44px}
+  .btn{font-size:.9rem;padding:14px}
+}
+</style>
 </head>
 <body>
-    <div class="wizard-container">
-        <h1>Marketing Analytics</h1>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-        <div class="step-indicator">Step 1 of 5</div>
-        <div id="summary" class="summary"></div>
-        <div id="stepContent" class="fade-in">
-            <div id="step1" class="step active">
-                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Select a Social Media Platform</h2>
-                <div class="options">
-                    <button class="option" data-value="Facebook">Facebook</button>
-                    <button class="option" data-value="Twitter">Twitter</button>
-                    <button class="option" data-value="Instagram">Instagram</button>
-                    <button class="option" data-value="TikTok">TikTok</button>
-                    <button class="option" data-value="WhatsApp">WhatsApp</button>
-                </div>
-            </div>
-            <div id="step2" class="step">
-                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Choose the content type on Instagram</h2>
-                <div class="options">
-                    <button class="option" data-value="Instagram Story">Instagram Story</button>
-                    <button class="option" data-value="Instagram Reels">Instagram Reels</button>
-                    <button class="option" data-value="Instagram Post">Instagram Post</button>
-                    <button class="option" data-value="Profile Bio">Profile Bio</button>
-                    <button class="option" data-value="Profile Action Button">Profile Action Button</button>
-                </div>
-            </div>
-            <div id="step3" class="step">
-                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Optional: Add additional categories to track</h2>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="addCategories">
-                    <label for="addCategories">I want to add custom categories</label>
-                </div>
-                <div id="categoryInputs" class="category-inputs">
-                    <input type="text" id="category1" placeholder="Enter Campaign Name">
-                    <input type="text" id="category2" placeholder="Enter Campaign Details (optional)" disabled>
-                </div>
-            </div>
-            <div id="step4" class="step">
-                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Paste URL to your shop's homepage or a specific product page</h2>
-                <input type="text" id="shopUrl" placeholder="Enter URL">
-            </div>
-            <div id="step5" class="step">
-                <br/><br/>
-                <h2 style="font-size: 1em;">🎉 Now you can promote the URL below! 🎯</h2>
-            </div>
-        </div>
-        <div class="button-container">
-            <button id="backBtn" class="button back-btn" disabled><i class="fas fa-arrow-left"></i> Back</button>
-            <button id="nextBtn" class="button next-btn" disabled>Next <i class="fas fa-arrow-right"></i></button>
-        </div>
-        <div id="urlContainer" class="hidden fade-in">
-            <input type="text" id="generatedUrl" readonly>
-            <button id="copyBtn" class="button copy-btn">Copy URL</button>
-            <br/><br/>
-            <button id="resetBtn" class="button reset-btn">Reset</button>
-        </div>
+
+<div class="lang-bar">
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button id="btn-bm" class="active" onclick="setLang('bm')">BM</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="header">
+    <div class="wa-icon">
+      <svg viewBox="0 0 32 32"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.52.67 4.9 1.83 6.94L2 30l7.29-1.79A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm7.07 19.49c-.29.82-1.71 1.57-2.33 1.63-.61.05-1.2.28-4.03-.84-3.41-1.35-5.58-4.85-5.75-5.07-.17-.22-1.39-1.85-1.39-3.53s.88-2.5 1.19-2.84c.31-.34.68-.43.91-.43.22 0 .45.002.65.01.21.01.49-.08.76.58.28.68 1.02 2.48.11 2.78-.91.31-1.25.62-1.25 1.23 0 .62 1.58 2.84 2.29 3.56.72.72 2.26 1.48 2.72 1.65.45.16.72.14 1.01-.14.29-.28.97-.97 1.22-.97.25 0 1.28.51 1.5.62.23.11.38.17.43.27.06.1.06.56-.23 1.38z"/></svg>
     </div>
+    <div class="header-text">
+      <h1 id="h-title">WA Tanpa Save Nombor</h1>
+      <p id="h-sub">Malaysia · +60</p>
+    </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let currentStep = 1;
-            let selections = {};
-            const totalSteps = 5;
+  <label class="field-label" for="phone" id="lbl-phone">Nombor Telefon</label>
+  <div class="input-wrap">
+    <span class="flag">🇲🇾</span>
+    <input type="text" id="phone" autocomplete="off" inputmode="tel"
+           placeholder="011 1172 8210 atau +60 11-1172 8210"/>
+  </div>
 
-            function updateUI() {
-                document.querySelector('.progress').style.width = `${((currentStep - 1) / (totalSteps - 1)) * 100}%`;
-                document.querySelector('.step-indicator').textContent = `Step ${currentStep} of ${totalSteps}`;
-                
-                document.querySelectorAll('.step').forEach((step, index) => {
-                    step.classList.toggle('active', index + 1 === currentStep);
-                });
-                
-                if (currentStep === totalSteps) {
-                    document.getElementById('urlContainer').classList.remove('hidden');
-                    document.getElementById('backBtn').classList.add('hidden');
-                    document.getElementById('nextBtn').classList.add('hidden');
-                } else {
-                    document.getElementById('urlContainer').classList.add('hidden');
-                    document.getElementById('backBtn').classList.remove('hidden');
-                    document.getElementById('nextBtn').classList.remove('hidden');
-                    document.getElementById('nextBtn').textContent = currentStep === totalSteps - 1 ? 'Generate URL' : 'Next';
-                }
+  <div class="msg-row">
+    <span class="error-txt" id="error-txt"></span>
+    <span class="clean-pill" id="clean-pill">
+      <span class="dot"></span>
+      <span id="clean-num"></span>
+    </span>
+  </div>
 
-                if(currentStep === 3) {
-                    const addCategoriesCheckbox = document.getElementById('addCategories');
-                    const categoryInputs = document.getElementById('categoryInputs');
-                    categoryInputs.classList.toggle('active', addCategoriesCheckbox.checked);
-                }
+  <button class="btn" id="wa-btn" onclick="openWA()">
+    <svg viewBox="0 0 32 32"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.52.67 4.9 1.83 6.94L2 30l7.29-1.79A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm7.07 19.49c-.29.82-1.71 1.57-2.33 1.63-.61.05-1.2.28-4.03-.84-3.41-1.35-5.58-4.85-5.75-5.07-.17-.22-1.39-1.85-1.39-3.53s.88-2.5 1.19-2.84c.31-.34.68-.43.91-.43.22 0 .45.002.65.01.21.01.49-.08.76.58.28.68 1.02 2.48.11 2.78-.91.31-1.25.62-1.25 1.23 0 .62 1.58 2.84 2.29 3.56.72.72 2.26 1.48 2.72 1.65.45.16.72.14 1.01-.14.29-.28.97-.97 1.22-.97.25 0 1.28.51 1.5.62.23.11.38.17.43.27.06.1.06.56-.23 1.38z"/></svg>
+    <span id="btn-label">WhatsApp Sekarang</span>
+  </button>
 
-                updateSummary();
+  <div class="examples">
+    <div class="examples-title" id="ex-title">Contoh · Klik untuk cuba</div>
+    <div class="ex" onclick="tryEx('011 1172 8210')">
+      <span class="ex-raw">011 1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    </div>
+    <div class="ex" onclick="tryEx('011-1172 8210')">
+      <span class="ex-raw">011-1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    </div>
+    <div class="ex" onclick="tryEx('+60 11-1172 8210')">
+      <span class="ex-raw">+60 11-1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    </div>
+    <div class="ex" onclick="tryEx('1111728210')">
+      <span class="ex-raw">1111728210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    </div>
+    <div class="ex" onclick="tryEx('03-2161 4455')">
+      <span class="ex-raw">03-2161 4455</span><span class="ex-arr">→</span><span class="ex-clean">60321614455</span>
+    </div>
+    <div class="ex" onclick="tryEx('+603 8888 2525')">
+      <span class="ex-raw">+603 8888 2525</span><span class="ex-arr">→</span><span class="ex-clean">60388882525</span>
+    </div>
+  </div>
+</div>
 
-                document.getElementById('backBtn').disabled = currentStep === 1;
-                document.getElementById('nextBtn').disabled = !isStepValid();
-            }
+<p class="footer" id="footer-txt">Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.</p>
 
-            function updateSummary() {
-                const summary = Object.entries(selections)
-                    .filter(([key, value]) => value && value !== 'Skip')
-                    .map(([key, value]) => {
-                        if (key === 'step3' && typeof value === 'object') {
-                            return Object.values(value).filter(v => v.trim() !== '').join(', ');
-                        }
-                        return value;
-                    })
-                    .join(' > ');
-                document.getElementById('summary').textContent = `Your selections: ${summary}`;
-            }
+<script>
+/* ── TRANSLATIONS ── */
+var T={
+  bm:{title:'WA Tanpa Save Nombor',sub:'Malaysia · +60',lbl:'Nombor Telefon',
+      ph:'011 1172 8210 atau +60 11-1172 8210',btn:'WhatsApp Sekarang',
+      exTitle:'Contoh · Klik untuk cuba',
+      errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
+      footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.'},
+  en:{title:'WA Without Saving Number',sub:'Malaysia · +60',lbl:'Phone Number',
+      ph:'011 1172 8210 or +60 11-1172 8210',btn:'WhatsApp Now',
+      exTitle:'Examples · Tap to try',
+      errBlank:'Please enter a phone number.',errBad:'Invalid number. Please check again.',
+      footer:'No number is saved. Everything is processed in your browser only.'}
+};
+var lang='bm';
 
-            function isStepValid() {
-                switch(currentStep) {
-                    case 1:
-                    case 2:
-                        return selections[`step${currentStep}`] !== undefined;
-                    case 3:
-                        const addCategoriesCheckbox = document.getElementById('addCategories');
-                        if (addCategoriesCheckbox.checked) {
-                            return selections['step3'] && selections['step3'].category1 && selections['step3'].category1.trim() !== '';
-                        }
-                        return true; // Step 3 is optional
-                    case 4:
-                        return document.getElementById('shopUrl').value.trim() !== '';
-                    default:
-                        return true;
-                }
-            }
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-bm').classList.toggle('active',l==='bm');
+  document.getElementById('btn-en').classList.toggle('active',l==='en');
+  var t=T[l];
+  document.getElementById('h-title').textContent=t.title;
+  document.getElementById('lbl-phone').textContent=t.lbl;
+  document.getElementById('phone').placeholder=t.ph;
+  document.getElementById('btn-label').textContent=t.btn;
+  document.getElementById('ex-title').textContent=t.exTitle;
+  document.getElementById('footer-txt').textContent=t.footer;
+  updatePreview();
+}
 
-            document.querySelectorAll('.step').forEach(step => {
-                step.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('option')) {
-                        step.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                        e.target.classList.add('selected');
-                        selections[`step${currentStep}`] = e.target.dataset.value;
-                        updateUI();
-                    }
-                });
-            });
+/* ── NUMBER CLEANING ──
+   Tested cases:
+   "011 1172 8210"       → 601111728210
+   "011-1172 8210"       → 601111728210
+   "+60 11-1172 8210"    → 601111728210
+   "+6011-11728210"      → 601111728210
+   "1111728210"          → 601111728210  (no 0, no 60 prefix)
+   "601111728210"        → 601111728210  (already clean)
+   "03-2161 4455"        → 60321614455
+   "+603 8888 2525"      → 60388882525
+   "0321614455"          → 60321614455
+   "  +60  11 - 1172 8210  " → 601111728210 (whitespace/mixed)
+*/
+function clean(raw){
+  if(!raw||!raw.trim())return null;
+  var d=raw.replace(/\D/g,'');          // digits only
+  if(!d)return null;
 
-            document.getElementById('addCategories').addEventListener('change', function() {
-                const categoryInputs = document.getElementById('categoryInputs');
-                categoryInputs.classList.toggle('active', this.checked);
-                if (!this.checked) {
-                    document.getElementById('category1').value = '';
-                    document.getElementById('category2').value = '';
-                    delete selections['step3'];
-                }
-                updateUI();
-            });
+  if(d.indexOf('60')===0){
+    // already has country code
+  }else if(d.charAt(0)==='0'){
+    d='60'+d.slice(1);                  // 011... → 6011...
+  }else{
+    d='60'+d;                           // 111... → 60111...
+  }
 
-            document.getElementById('category1').addEventListener('input', function() {
-                const category2Input = document.getElementById('category2');
-                if (this.value.trim() !== '') {
-                    selections['step3'] = {category1: this.value, category2: ''};
-                    category2Input.disabled = false;
-                } else {
-                    delete selections['step3'];
-                    category2Input.disabled = true;
-                    category2Input.value = '';
-                }
-                updateUI();
-            });
+  var local=d.slice(2);                 // part after '60'
+  if(local.length<7||local.length>10)return null;
+  return d;
+}
 
-            document.getElementById('category2').addEventListener('input', function() {
-                if (selections['step3']) {
-                    selections['step3'].category2 = this.value;
-                }
-                updateUI();
-            });
+/* ── UI ── */
+var phoneEl=document.getElementById('phone');
+var pillEl=document.getElementById('clean-pill');
+var numEl=document.getElementById('clean-num');
+var errEl=document.getElementById('error-txt');
 
-            document.getElementById('shopUrl').addEventListener('input', function() {
-                selections['step4'] = this.value;
-                updateUI();
-            });
+function updatePreview(){
+  var r=clean(phoneEl.value);
+  if(r){numEl.textContent=r;pillEl.classList.add('show');}
+  else{pillEl.classList.remove('show');}
+}
 
-            document.getElementById('backBtn').addEventListener('click', function() {
-                if (currentStep > 1) {
-                    currentStep--;
-                    updateUI();
-                }
-            });
+function openWA(){
+  var raw=phoneEl.value.trim();
+  errEl.classList.remove('show');
+  phoneEl.classList.remove('is-error');
+  if(!raw){showErr(T[lang].errBlank);shake();return;}
+  var r=clean(raw);
+  if(!r){showErr(T[lang].errBad);phoneEl.classList.add('is-error');shake();return;}
+  window.open('https://wa.me/'+r,'_blank');
+}
 
-            document.getElementById('nextBtn').addEventListener('click', function() {
-                if (currentStep < totalSteps) {
-                    if (currentStep === 4) {
-                        const aff_sub = '12345'; // Hardcoded user_id for testing
+function showErr(msg){
+  errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');
+}
 
-                        let aff_sub2 = encodeURIComponent(selections['step1'] || '');
-                        let aff_sub3 = encodeURIComponent(selections['step2'] || '');
-                        let aff_sub4 = encodeURIComponent(selections['step3']?.category1 || '');
-                        let aff_sub5 = encodeURIComponent(selections['step3']?.category2 || '');
+function shake(){
+  phoneEl.animate(
+    [{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},
+     {transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],
+    {duration:300,easing:'ease-in-out'}
+  );
+}
 
-                        const url = `https://invl.io/cljuixt?aff_sub=${aff_sub}&aff_sub2=${aff_sub2}&aff_sub3=${aff_sub3}&aff_sub4=${aff_sub4}&aff_sub5=${aff_sub5}`;
-                        document.getElementById('generatedUrl').value = url;
-                    }
-                    currentStep++;
-                    updateUI();
-                }
-            });
+function tryEx(val){
+  phoneEl.value=val;
+  phoneEl.classList.remove('is-error');
+  errEl.classList.remove('show');
+  updatePreview();
+}
 
-            document.getElementById('copyBtn').addEventListener('click', function() {
-                const urlInput = document.getElementById('generatedUrl');
-                urlInput.select();
-                document.execCommand('copy');
-                this.textContent = 'Copied!';
-                setTimeout(() => this.textContent = 'Copy URL', 2000);
-            });
-
-            document.getElementById('resetBtn').addEventListener('click', function() {
-                currentStep = 1;
-                selections = {};
-                document.querySelectorAll('input[type="text"]').forEach(input => {
-                    input.value = '';
-                    input.disabled = false;
-                });
-                document.getElementById('addCategories').checked = false;
-                document.getElementById('categoryInputs').classList.remove('active');
-                document.getElementById('category2').disabled = true;
-                document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                updateUI();
-            });
-
-            updateUI();
-        });
-    </script>
+phoneEl.addEventListener('input',function(){
+  phoneEl.classList.remove('is-error');
+  errEl.classList.remove('show');
+  updatePreview();
+});
+phoneEl.addEventListener('keydown',function(e){if(e.key==='Enter')openWA();});
+</script>
 </body>
 </html>
