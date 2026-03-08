@@ -273,23 +273,17 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
   <!-- Examples -->
   <div class="examples">
     <div class="examples-title" id="ex-title">Contoh · Klik untuk cuba</div>
-    <div class="ex" onclick="tryEx('011 1172 8210')">
-      <span class="ex-raw">011 1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    <div class="ex" onclick="tryEx('016 333 1111')">
+      <span class="ex-raw">016 333 1111</span><span class="ex-arr">→</span><span class="ex-clean">60163331111</span>
     </div>
-    <div class="ex" onclick="tryEx('011-1172 8210')">
-      <span class="ex-raw">011-1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    <div class="ex" onclick="tryEx('+60 16-333 1111')">
+      <span class="ex-raw">+60 16-333 1111</span><span class="ex-arr">→</span><span class="ex-clean">60163331111</span>
     </div>
-    <div class="ex" onclick="tryEx('+60 11-1172 8210')">
-      <span class="ex-raw">+60 11-1172 8210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
+    <div class="ex" onclick="tryEx('016-333 1111')">
+      <span class="ex-raw">016-333 1111</span><span class="ex-arr">→</span><span class="ex-clean">60163331111</span>
     </div>
-    <div class="ex" onclick="tryEx('1111728210')">
-      <span class="ex-raw">1111728210</span><span class="ex-arr">→</span><span class="ex-clean">601111728210</span>
-    </div>
-    <div class="ex" onclick="tryEx('03-2161 4455')">
-      <span class="ex-raw">03-2161 4455</span><span class="ex-arr">→</span><span class="ex-clean">60321614455</span>
-    </div>
-    <div class="ex" onclick="tryEx('+603 8888 2525')">
-      <span class="ex-raw">+603 8888 2525</span><span class="ex-arr">→</span><span class="ex-clean">60388882525</span>
+    <div class="ex" onclick="tryEx('163331111')">
+      <span class="ex-raw">163331111</span><span class="ex-arr">→</span><span class="ex-clean">60163331111</span>
     </div>
   </div>
 
@@ -426,7 +420,6 @@ function clearInput(){
 
 function pasteInput(){
   if(!navigator.clipboard||!navigator.clipboard.readText){
-    // Fallback: just focus the field so the native paste popover appears
     phoneEl.focus();
     return;
   }
@@ -439,7 +432,6 @@ function pasteInput(){
     updatePreview();
     try{sessionStorage.setItem('wa-num',text);}catch(e){}
   }).catch(function(){
-    // Permission denied or not supported — focus field so native paste works
     phoneEl.focus();
   });
 }
@@ -450,10 +442,7 @@ function openWA(){
   if(!raw){showErr(T[lang].errBlank);shake();return;}
   var r=clean(raw);
   if(!r){showErr(T[lang].errBad);phoneEl.classList.add('is-error');shake();return;}
-  // Use same-tab navigation instead of _blank.
-  // wa.me redirects to the WhatsApp app; the browser tab stays on wa.me.
-  // Pressing Back restores this page from bfcache — no orphan blank tab.
-  window.location.href = 'https://wa.me/' + r;
+  window.location.href='https://wa.me/'+r;
 }
 
 function showErr(msg){errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');}
@@ -472,20 +461,16 @@ function tryEx(val){
 
 phoneEl.addEventListener('input',function(){
   phoneEl.classList.remove('is-error');errEl.classList.remove('show');updatePreview();
-});
-phoneEl.addEventListener('keydown',function(e){if(e.key==='Enter')openWA();});
-
-// Persist the input value so it survives a full page reload (not just bfcache)
-phoneEl.addEventListener('input',function(){
   try{sessionStorage.setItem('wa-num',phoneEl.value);}catch(e){}
 });
+phoneEl.addEventListener('keydown',function(e){if(e.key==='Enter')openWA();});
 
 window.addEventListener('pageshow',function(){
   try{
     var saved=sessionStorage.getItem('wa-num');
     if(saved&&!phoneEl.value){phoneEl.value=saved;}
   }catch(e){}
-  updatePreview(); // handles both paste/clear visibility
+  updatePreview();
 });
 
 /* ── SERVICE WORKER ── */
@@ -530,7 +515,6 @@ function isStandalone(){
 }
 function isSafari(){
   var ua=navigator.userAgent;
-  // Safari on iOS: has "Safari" but NOT "CriOS" (Chrome) or "FxiOS" (Firefox)
   return /Safari/i.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
 }
 
@@ -543,7 +527,6 @@ function closeBanner(){
 window.addEventListener('load',function(){
   if(isIOS()&&isSafari()&&!isStandalone()){
     try{if(sessionStorage.getItem('ios-banner-closed'))return;}catch(e){}
-    // Small delay so it doesn't feel jarring on load
     setTimeout(function(){
       document.getElementById('ios-banner').classList.add('show');
     },1200);
