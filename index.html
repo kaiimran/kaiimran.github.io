@@ -108,18 +108,18 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 .btn:active{transform:scale(.97);box-shadow:0 2px 10px rgba(37,211,102,.25);opacity:.92}
 @media(hover:hover){.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,211,102,.46)}}
 
-/* ── INSTALL BUTTON (Android) ── */
+/* ── INSTALL BUTTON (Android) — low visual weight, below examples ── */
 .btn-install{
-  display:none;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:13px;margin-top:10px;
-  background:transparent;border:2px solid var(--border);border-radius:var(--r);
-  font-family:inherit;font-size:.88rem;font-weight:700;color:var(--gdark);cursor:pointer;
+  display:none;align-items:center;justify-content:center;gap:6px;
+  width:100%;padding:10px;margin-top:10px;
+  background:transparent;border:1.5px dashed var(--border);border-radius:12px;
+  font-family:inherit;font-size:.75rem;font-weight:600;color:var(--muted);cursor:pointer;
   -webkit-tap-highlight-color:transparent;touch-action:manipulation;
-  transition:border-color .15s,background .15s;
+  transition:border-color .15s,color .15s,background .15s;
+  letter-spacing:.1px;
 }
 .btn-install.visible{display:flex}
-.btn-install:active{background:var(--cream)}
-.btn-install svg{width:18px;height:18px;flex-shrink:0}
+.btn-install:active{background:var(--cream);color:var(--txt)}
 
 /* ── EXAMPLES ── */
 .examples{margin-top:20px;background:var(--cream);border-radius:14px;padding:14px 16px}
@@ -227,14 +227,6 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
     <span id="btn-label">WhatsApp Sekarang</span>
   </button>
 
-  <!-- Android Install App button — shown only when PWA install is available -->
-  <button class="btn-install" id="btn-install" onclick="installApp()">
-    <svg id="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/>
-    </svg>
-    <span id="install-label">Pasang Aplikasi</span>
-  </button>
-
   <!-- Examples -->
   <div class="examples">
     <div class="examples-title" id="ex-title">Contoh · Klik untuk cuba</div>
@@ -257,6 +249,14 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
       <span class="ex-raw">+603 8888 2525</span><span class="ex-arr">→</span><span class="ex-clean">60388882525</span>
     </div>
   </div>
+
+  <!-- Android Install App — subtle, below examples, low visual weight -->
+  <button class="btn-install" id="btn-install" onclick="installApp()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+      <path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/>
+    </svg>
+    <span id="install-label">Muat Turun Aplikasi</span>
+  </button>
 </div>
 
 <p class="footer" id="footer-txt">Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.</p>
@@ -270,14 +270,14 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
     <div class="ios-banner-body">
       <div class="ios-banner-title" id="ios-title">Simpan ke Skrin Utama</div>
       <div class="ios-banner-desc" id="ios-desc">
-        Guna seperti app — tiada perlu buka browser setiap kali.
+        Guna seperti app — tidak perlu buka browser setiap kali.
       </div>
     </div>
     <button class="ios-banner-close" onclick="closeBanner()" aria-label="Tutup">✕</button>
   </div>
   <div class="ios-steps" id="ios-steps">
     <div class="ios-step">
-      <span id="step1">1. Ketik</span>
+      <span id="step1">1. Tekan</span>
       <!-- Share icon -->
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#128c4e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
@@ -299,10 +299,10 @@ var T={
     exTitle:'Contoh · Klik untuk cuba',
     errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
     footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.',
-    install:'Pasang Aplikasi',
+    install:'Muat Turun Aplikasi',
     iosTitle:'Simpan ke Skrin Utama',
-    iosDesc:'Guna seperti app — tiada perlu buka browser setiap kali.',
-    step1:'1. Ketik',step2:'2. "Add to Home Screen"',step3:'3. Add'
+    iosDesc:'Guna seperti app — tidak perlu buka browser setiap kali.',
+    step1:'1. Tekan',step2:'2. "Add to Home Screen"',step3:'3. Add'
   },
   en:{
     title:'WA Without Saving Number',lbl:'Phone Number',
