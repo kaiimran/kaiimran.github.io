@@ -139,7 +139,33 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
 .btn:active{transform:scale(.97);box-shadow:0 2px 10px rgba(37,211,102,.25);opacity:.92}
 @media(hover:hover){.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,211,102,.46)}}
 
-/* ── INSTALL BUTTON (Android) — low visual weight, below examples ── */
+/* ── SECONDARY ACTIONS ROW (Copy / Share) ── */
+.sec-row{
+  display:flex;gap:8px;margin-top:8px;
+}
+.btn-sec{
+  flex:1;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px 8px;
+  background:transparent;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  font-family:inherit;font-size:.78rem;font-weight:700;
+  color:var(--muted);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:border-color .15s,color .15s,background .15s;
+  white-space:nowrap;
+}
+.btn-sec svg{width:14px;height:14px;flex-shrink:0;transition:none}
+.btn-sec:active{background:var(--cream);color:var(--txt);border-color:#bbb}
+@media(hover:hover){.btn-sec:hover{border-color:#bbb;color:var(--txt)}}
+/* copied state */
+.btn-sec.copied{
+  border-color:var(--g1);color:var(--g2);background:rgba(37,211,102,.07);
+}
+/* hide share if Web Share API unavailable */
+.btn-share-wrap{flex:1;display:flex}
+.btn-share-wrap.hidden{display:none}
 .btn-install{
   display:none;align-items:center;justify-content:center;gap:6px;
   width:100%;padding:10px;margin-top:10px;
@@ -270,6 +296,27 @@ input[type=text].is-error{border-color:var(--err);box-shadow:0 0 0 3px rgba(192,
     <span id="btn-label">WhatsApp Sekarang</span>
   </button>
 
+  <!-- Secondary actions: Copy URL + Share URL -->
+  <div class="sec-row">
+    <button class="btn-sec" id="btn-copy" onclick="copyURL()">
+      <!-- Copy icon -->
+      <svg id="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      <span id="copy-label">Salin URL</span>
+    </button>
+    <div class="btn-share-wrap" id="share-wrap">
+      <button class="btn-sec" id="btn-share" onclick="shareURL()">
+        <!-- Share icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span id="share-label">Kongsi URL</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Examples -->
   <div class="examples">
     <div class="examples-title" id="ex-title">Contoh · Klik untuk cuba</div>
@@ -337,6 +384,7 @@ var T={
     errBlank:'Sila masukkan nombor telefon.',errBad:'Nombor tidak sah. Sila semak semula.',
     footer:'Tiada nombor disimpan. Semua diproses dalam pelayar anda sahaja.',
     install:'Muat Turun Aplikasi',paste:'Paste',
+    copy:'Salin URL',copyDone:'Disalin!',share:'Kongsi URL',
     iosTitle:'Simpan ke Skrin Utama',
     iosDesc:'Guna seperti app — tidak perlu buka browser setiap kali.',
     step1:'1. Klik',step2:'2. "Add to Home Screen"',step3:'3. Add'
@@ -348,6 +396,7 @@ var T={
     errBlank:'Please enter a phone number.',errBad:'Invalid number. Please check again.',
     footer:'No number is saved. Everything is processed in your browser only.',
     install:'Install App',paste:'Paste',
+    copy:'Copy URL',copyDone:'Copied!',share:'Share URL',
     iosTitle:'Add to Home Screen',
     iosDesc:'Use like an app — no need to open the browser every time.',
     step1:'1. Tap',step2:'2. "Add to Home Screen"',step3:'3. Add'
@@ -368,6 +417,8 @@ function setLang(l){
   document.getElementById('footer-txt').textContent=t.footer;
   document.getElementById('install-label').textContent=t.install;
   document.getElementById('paste-label').textContent=t.paste;
+  document.getElementById('copy-label').textContent=t.copy;
+  document.getElementById('share-label').textContent=t.share;
   document.getElementById('ios-title').textContent=t.iosTitle;
   document.getElementById('ios-desc').textContent=t.iosDesc;
   document.getElementById('step1').textContent=t.step1;
@@ -446,6 +497,61 @@ function openWA(){
 }
 
 function showErr(msg){errEl.textContent=msg;errEl.classList.add('show');pillEl.classList.remove('show');}
+
+/* ── shared helper: validate + return wa.me URL, or null ── */
+function getWAUrl(){
+  var raw=phoneEl.value.trim();
+  errEl.classList.remove('show');phoneEl.classList.remove('is-error');
+  if(!raw){showErr(T[lang].errBlank);shake();return null;}
+  var r=clean(raw);
+  if(!r){showErr(T[lang].errBad);phoneEl.classList.add('is-error');shake();return null;}
+  return 'https://wa.me/'+r;
+}
+
+function copyURL(){
+  var url=getWAUrl();
+  if(!url)return;
+  var btn=document.getElementById('btn-copy');
+  var lbl=document.getElementById('copy-label');
+  var icon=document.getElementById('copy-icon');
+  navigator.clipboard.writeText(url).then(function(){
+    // Success state
+    btn.classList.add('copied');
+    lbl.textContent=T[lang].copyDone;
+    icon.innerHTML='<polyline points="20 6 9 17 4 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      lbl.textContent=T[lang].copy;
+      icon.innerHTML='<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>';
+    },2000);
+  }).catch(function(){
+    // Fallback: select all text in a temp input
+    var tmp=document.createElement('input');
+    tmp.value=url;document.body.appendChild(tmp);
+    tmp.select();document.execCommand('copy');document.body.removeChild(tmp);
+    btn.classList.add('copied');lbl.textContent=T[lang].copyDone;
+    setTimeout(function(){btn.classList.remove('copied');lbl.textContent=T[lang].copy;},2000);
+  });
+}
+
+function shareURL(){
+  var url=getWAUrl();
+  if(!url)return;
+  navigator.share({
+    title:'WA Tanpa Save',
+    text: lang==='bm'
+      ? 'WhatsApp saya terus tanpa simpan nombor:'
+      : 'WhatsApp me directly without saving my number:',
+    url:url
+  }).catch(function(){/* user cancelled — do nothing */});
+}
+
+/* hide Share button if Web Share API not available */
+window.addEventListener('DOMContentLoaded',function(){
+  if(!navigator.share){
+    document.getElementById('share-wrap').classList.add('hidden');
+  }
+});
 
 function shake(){
   phoneEl.animate(
