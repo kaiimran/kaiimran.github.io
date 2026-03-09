@@ -540,8 +540,8 @@ function shareURL(){
   navigator.share({
     title:'WA Tanpa Save',
     text: lang==='bm'
-      ? 'WhatsApp saya terus tanpa simpan nombor:'
-      : 'WhatsApp me directly without saving my number:',
+      ? 'WhatsApp terus:'
+      : 'WhatsApp directly:',
     url:url
   }).catch(function(){/* user cancelled — do nothing */});
 }
